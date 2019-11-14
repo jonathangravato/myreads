@@ -1,8 +1,95 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
+import BookShelf from './BookShelf'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
 
-class BooksApp extends React.Component {
+const books = [
+  {
+    allowAnonLogging: true,
+    authors:   ['Harper Lee'],
+    averageRating: '',
+    canonicalVolumeLink: '',
+    categories: [],
+    contentVersion: '',
+    description: '',
+    id: '',
+    imageLinks: {smallThumbnail: '', thumbnail: 'http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api'},
+    industryIdentifiers: [{}],
+    infoLink: '',
+    language: 'en',
+    maturityRating: 'MATURE',
+    pageCount: '',
+    panelizationSummary: {containsEpubBubbles: false, containsImageBubbles: false},
+    previewLink: '',
+    printType: 'BOOK',
+    publishedDate: '',
+    publisher: '',
+    ratingsCount: '',
+    readingModes: {text: true, image: false},
+    shelf: 'currentlyReading',
+    subtitle: '',
+    title:    'To Kill a Mockingbird'
+  },
+  {
+    allowAnonLogging: true,
+    authors:   ['Harper Lee'],
+    averageRating: '',
+    canonicalVolumeLink: '',
+    categories: [],
+    contentVersion: '',
+    description: '',
+    id: '',
+    imageLinks: {smallThumbnail: '', thumbnail: 'http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api'},
+    industryIdentifiers: [{}],
+    infoLink: '',
+    language: 'en',
+    maturityRating: 'MATURE',
+    pageCount: '',
+    panelizationSummary: {containsEpubBubbles: false, containsImageBubbles: false},
+    previewLink: '',
+    printType: 'BOOK',
+    publishedDate: '',
+    publisher: '',
+    ratingsCount: '',
+    readingModes: {text: true, image: false},
+    shelf: 'currentlyReading',
+    subtitle: '',
+    title:    'Ender\'s Game'
+  },
+]
+
+class SearchBooks extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event){
+    this.setState({value: event.target.value});
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((results) => {
+      console.log(results);
+    }) 
+  }
+
+  componentDidUpdate(prevProps) {
+    //console.log(this.state);  
+  }
+
+  render() {
+    return (
+      <form>
+        <input type="text" value={this.state.value} placeholder="Search by title or author" onChange={this.handleChange}/>
+      </form>
+    )
+  }
+}
+
+class App extends React.Component {
   state = {
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -29,7 +116,7 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author"/>
+                <SearchBooks />
 
               </div>
             </div>
@@ -47,44 +134,7 @@ class BooksApp extends React.Component {
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Currently Reading</h2>
                   <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      <li>
-                        <div className="book">
-                          <div className="book-top">
-                            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")' }}></div>
-                            <div className="book-shelf-changer">
-                              <select>
-                                <option value="move" disabled>Move to...</option>
-                                <option value="currentlyReading">Currently Reading</option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="book-title">To Kill a Mockingbird</div>
-                          <div className="book-authors">Harper Lee</div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="book">
-                          <div className="book-top">
-                            <div className="book-cover" style={{ width: 128, height: 188, backgroundImage: 'url("http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api")' }}></div>
-                            <div className="book-shelf-changer">
-                              <select>
-                                <option value="move" disabled>Move to...</option>
-                                <option value="currentlyReading">Currently Reading</option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="book-title">Ender's Game</div>
-                          <div className="book-authors">Orson Scott Card</div>
-                        </div>
-                      </li>
-                    </ol>
+                    <BookShelf books={books} />
                   </div>
                 </div>
                 <div className="bookshelf">
@@ -203,4 +253,4 @@ class BooksApp extends React.Component {
   }
 }
 
-export default BooksApp
+export default App
