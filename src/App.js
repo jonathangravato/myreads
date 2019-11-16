@@ -1,6 +1,6 @@
 import React from 'react'
 import BookShelf from './BookShelf'
-import SearchBooks from './Componets/SearchBooks'
+import SearchBooks from './SearchBooks'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 
@@ -33,7 +33,7 @@ const books = [
   },
   {
     allowAnonLogging: true,
-    authors:   ['Harper Lee'],
+    authors:   ['Orson Scott Card'],
     averageRating: '',
     canonicalVolumeLink: '',
     categories: [],
