@@ -58,33 +58,31 @@ const books = [
   },
 ]
 
+// class UpdateBooks extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {books: {books}};
+
+//     this.handleChange = this.handleChange.bind(this);
+//   }
+// }
+
 class SearchBooks extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {query: ''};
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event){
-    this.setState({value: event.target.value});
-  }
-
-  componentDidMount() {
-    BooksAPI.getAll().then((results) => {
-      console.log(results);
-    }) 
-  }
-
-  componentDidUpdate(prevProps) {
-    //console.log(this.state);  
+    this.setState({query: event.target.value});
+    console.log(this.state.query);
   }
 
   render() {
     return (
-      <form>
-        <input type="text" value={this.state.value} placeholder="Search by title or author" onChange={this.handleChange}/>
-      </form>
+      <div><p>Foo</p></div>
     )
   }
 }
@@ -97,7 +95,14 @@ class App extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    showSearchPage: false
+    showSearchPage: false,
+    books: []
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((results) => {
+      this.setState({books: results});
+    }); 
   }
 
   render() {
@@ -116,7 +121,9 @@ class App extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <SearchBooks />
+                <form>
+                  <input type="text" value={this.state.value} placeholder="Search by title or author" onKeyPress={SearchBooks.handleChange}/>
+                </form>
 
               </div>
             </div>
