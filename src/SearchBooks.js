@@ -34,7 +34,7 @@ class SearchBooks extends Component {
                 type="text"
                 value={this.state.value}
                 placeholder="Search by title or author"
-                onKeyPress={SearchBooks.handleChange}
+                onKeyPress={this.handleChange}
               />
             </form>
           </div>
