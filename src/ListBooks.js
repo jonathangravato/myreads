@@ -4,39 +4,36 @@ class ListBooks extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        shelfReading: [],
-        shelfWantRead: [],
-        shelfRead: [],
+        shelfReading: {
+          title: 'Currently Reading',
+          books: []
+        },
+        shelfWantRead: {
+          title: 'Want to Read',
+          books: []
+        },
+        shelfRead: {
+          title: 'Read',
+          books: []
+        },
         sortedBooks: []
       }
 
       //this.handleChange = this.handleChange.bind(this);
-      this.sortBooks = this.sortBooks.bind(this)
-    }
-
-    sortBooks(b, s){
-        if(s === 'currentlyReading') {
-            this.state.shelfReading.push(b)
-        }
-        if(s === 'wantToRead') {
-            this.state.shelfWantRead.push(b)
-        }
-        if(s === 'read') {
-            this.state.shelfRead.push(b)
-        }
+      //this.sortBooks = this.sortBooks.bind(this)
     }
 
     componentDidUpdate() {
-        //TODO: sort books
+        // eslint-disable-next-line array-callback-return
         this.props.books.map((book) => {
-          return this.sortBooks(book, book.shelf)
+          book.shelf === 'currentlyReading' && this.state.shelfReading.books.push(book)
+          book.shelf === 'wantToRead' && this.state.shelfWantRead.books.push(book)
+          book.shelf === 'read' && this.state.shelfRead.books.push(book)
         })
         
-        this.state.sortedBooks.push(this.state.shelfReading)
-        this.state.sortedBooks.push(this.state.shelfWantRead)
-        this.state.sortedBooks.push(this.state.shelfRead)
-
-        console.log(this.state.sortedBooks)
+        this.setState((state) => ({
+          sortedBooks: [...this.state.shelfReading.books, ...this.state.shelfWantRead.books, ...this.state.shelfRead.books]
+        }))
     }
     
     render() {
