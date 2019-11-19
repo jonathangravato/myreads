@@ -3,13 +3,19 @@ import React, { Component } from 'react';
 class SearchBooks extends Component {
   constructor(props) {
     super(props);
-    this.state = { query: '' };
+    this.state = { query: null };
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ query: event.target.value });
+
+    //console.log(event.key);
+
+    if (event.key === ' ') {
+      this.setState({ query: event.target.value });
+    };
+
     console.log(this.state.query);
   }
 
@@ -40,7 +46,9 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          <ol className="books-grid">
+            
+          </ol>
         </div>
       </div>
     );

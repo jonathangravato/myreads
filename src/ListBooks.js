@@ -1,8 +1,49 @@
 import React, { Component } from 'react'
 
-class Book extends Component {
+class ListBooks extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        shelfReading: [],
+        shelfWantRead: [],
+        shelfRead: [],
+        sortedBooks: []
+      }
+
+      //this.handleChange = this.handleChange.bind(this);
+      this.sortBooks = this.sortBooks.bind(this)
+    }
+
+    sortBooks(b, s){
+        if(s === 'currentlyReading') {
+            this.state.shelfReading.push(b)
+        }
+        if(s === 'wantToRead') {
+            this.state.shelfWantRead.push(b)
+        }
+        if(s === 'read') {
+            this.state.shelfRead.push(b)
+        }
+    }
+
+    componentDidUpdate() {
+        //TODO: sort books
+        this.props.books.map((book) => {
+          return this.sortBooks(book, book.shelf)
+        })
+        
+        this.state.sortedBooks.push(this.state.shelfReading)
+        this.state.sortedBooks.push(this.state.shelfWantRead)
+        this.state.sortedBooks.push(this.state.shelfRead)
+
+        console.log(this.state.sortedBooks)
+    }
+    
     render() {
-        return (
+      return (
+        <div className="bookshelf">
+          <h2 className="bookshelf-title">Books in List</h2>
+          <div className="bookshelf-books">
             <ol className="books-grid">
                 {this.props.books.map((book) => (
                     <li key={book.title}>
@@ -10,7 +51,7 @@ class Book extends Component {
                         <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url('${book.imageLinks.thumbnail}')` }}></div>
                         <div className="book-shelf-changer">
-                            <select>
+                            <select onChange={this.updateShelf}>
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
@@ -29,8 +70,10 @@ class Book extends Component {
                     </li>
                 ))}
             </ol>
-        )
+          </div>
+        </div>
+      )
     }
-}
-
-export default Book
+  }
+  
+  export default ListBooks
