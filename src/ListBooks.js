@@ -28,6 +28,7 @@ class ListBooks extends Component {
 
     componentDidUpdate() {
         //TODO: sort books
+          console.log(this.props.books)
         this.props.books.map((book) => {
           return this.sortBooks(book, book.shelf)
         })
@@ -36,7 +37,7 @@ class ListBooks extends Component {
         this.state.sortedBooks.push(this.state.shelfWantRead)
         this.state.sortedBooks.push(this.state.shelfRead)
 
-        console.log(this.state.sortedBooks)
+        //console.log(this.state.sortedBooks)
     }
     
     render() {
