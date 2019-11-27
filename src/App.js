@@ -15,9 +15,26 @@ class App extends React.Component {
        * pages, as well as provide a good URL they can bookmark and share.
        */
       showSearchPage: false,
-      books: []
+      books: null,
+      sortedBooks: [
+        {
+          shelfReading: {
+            title: '',
+            books: null
+          },
+          shelfWantRead: {
+            title: '',
+            books: null
+          },
+          shelfRead: {
+            title: '',
+            books: null
+          }
+        }
+      ]
     }
-
+    
+    this.sortBooks = this.sortBooks.bind(this)
     this.toggleSearchPage = this.toggleSearchPage.bind(this)
   }
 
@@ -25,9 +42,42 @@ class App extends React.Component {
     this.setState({ showSearchPage: false })
   }
 
+  sortBooks(books) {
+
+    const shelfReading = []
+    const shelfWantRead = []
+    const shelfRead = []
+
+    books.map((book) => {
+      book.shelf === 'currentlyReading' && shelfReading.push(book)
+      book.shelf === 'wantToRead' && shelfWantRead.push(book)
+      book.shelf === 'read' && shelfRead.push(book)
+      return books
+    })
+
+    this.setState(() => ({
+      sortedBooks: {
+        shelfReading: {
+          title: 'Currently Reading',
+          books: shelfReading
+        },
+        shelfWantRead: {
+          title: 'Want to Read',
+          books: shelfWantRead
+        },
+        shelfRead: {
+          title: 'Read',
+          books: shelfRead
+        }
+      }
+    }))
+  }
+
   componentDidMount() {
     //getAll from BooksAPI
     BooksAPI.getAll().then((books) => {
+      // Sort books into shelves to be passed to list books
+      this.sortBooks(books)
       this.setState(() => ({
         books
       }))
@@ -46,7 +96,10 @@ class App extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <ListBooks books={this.state.books}/>
+                <ListBooks 
+                  books = {this.state.books}
+                  shelves = {this.state.sortedBooks}
+                />
               </div>
             </div>
             <div className="open-search">
