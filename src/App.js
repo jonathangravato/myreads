@@ -5,82 +5,40 @@ import ListBooks from './ListBooks';
 import './App.css';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      /**
-       * TODO: Instead of using this state variable to keep track of which page
-       * we're on, use the URL in the browser's address bar. This will ensure that
-       * users can use the browser's back and forward buttons to navigate between
-       * pages, as well as provide a good URL they can bookmark and share.
-       */
-      showSearchPage: false,
-      books: null,
-      sortedBooks: [
-        {
-          shelfReading: {
-            title: '',
-            books: null
-          },
-          shelfWantRead: {
-            title: '',
-            books: null
-          },
-          shelfRead: {
-            title: '',
-            books: null
-          }
-        }
-      ]
-    }
+  
+  state = {
+    /**
+     * TODO: Instead of using this state variable to keep track of which page
+     * we're on, use the URL in the browser's address bar. This will ensure that
+     * users can use the browser's back and forward buttons to navigate between
+     * pages, as well as provide a good URL they can bookmark and share.
+     */
+    showSearchPage: false,
     
-    this.sortBooks = this.sortBooks.bind(this)
-    this.toggleSearchPage = this.toggleSearchPage.bind(this)
+    booksCollection: [],
+    currentlyReading: [],
+    wantToRead: [],
+    read: []
   }
 
   toggleSearchPage() {
     this.setState({ showSearchPage: false })
   }
 
-  sortBooks(books) {
-
-    const shelfReading = []
-    const shelfWantRead = []
-    const shelfRead = []
-
-    books.map((book) => {
-      book.shelf === 'currentlyReading' && shelfReading.push(book)
-      book.shelf === 'wantToRead' && shelfWantRead.push(book)
-      book.shelf === 'read' && shelfRead.push(book)
-      return books
+  sortBooks = (books) => {
+    this.setState({
+      booksCollection: books,
+      currentlyReading: books.filter( book => (book.shelf === "currentlyReading") ),
+      wantToRead: books.filter( book => (book.shelf === "wantToRead") ),
+      read: books.filter( book => (book.shelf === "read") )
     })
-
-    this.setState(() => ({
-      sortedBooks: {
-        shelfReading: {
-          title: 'Currently Reading',
-          books: shelfReading
-        },
-        shelfWantRead: {
-          title: 'Want to Read',
-          books: shelfWantRead
-        },
-        shelfRead: {
-          title: 'Read',
-          books: shelfRead
-        }
-      }
-    }))
   }
 
   componentDidMount() {
     //getAll from BooksAPI
-    BooksAPI.getAll().then((books) => {
-      // Sort books into shelves to be passed to list books
+    BooksAPI.getAll().then( books => {
+      // Sort books for shelves
       this.sortBooks(books)
-      this.setState(() => ({
-        books
-      }))
     })
   }
 
@@ -96,10 +54,30 @@ class App extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <ListBooks 
-                  books = {this.state.books}
-                  shelves = {this.state.sortedBooks}
-                />
+                <div className="bookshelf">
+                  <h2 className="bookshelf-title">Currently Reading</h2>
+                  <div className="bookshelf-books">
+                    {this.state.currentlyReading.length > 0 && (
+                      <ListBooks books = {this.state.currentlyReading} />
+                    )}
+                  </div>
+                </div>
+                <div className="bookshelf">
+                  <h2 className="bookshelf-title">Want to Read</h2>
+                  <div className="bookshelf-books">
+                    {this.state.currentlyReading.length > 0 && (
+                      <ListBooks books = {this.state.wantToRead} />
+                    )}
+                  </div>
+                </div>
+                <div className="bookshelf">
+                  <h2 className="bookshelf-title">Read</h2>
+                  <div className="bookshelf-books">
+                    {this.state.currentlyReading.length > 0 && (
+                      <ListBooks books = {this.state.read} />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="open-search">
