@@ -42,6 +42,17 @@ class App extends React.Component {
     })
   }
 
+  updateBookShelf = (book, shelf) => {
+    // TODO: BooksAPI update method
+    BooksAPI.update(book, shelf).then(() => {
+      BooksAPI.getAll().then(
+        books => {
+          this.sortBooks(books)
+        }
+      )
+    }) 
+  }
+
   render() {
     return (
       <div className="app">
@@ -58,23 +69,23 @@ class App extends React.Component {
                   <h2 className="bookshelf-title">Currently Reading</h2>
                   <div className="bookshelf-books">
                     {this.state.currentlyReading.length > 0 && (
-                      <ListBooks books = {this.state.currentlyReading} />
+                      <ListBooks books = {this.state.currentlyReading} updateShelf = {this.updateBookShelf} />
                     )}
                   </div>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
                   <div className="bookshelf-books">
-                    {this.state.currentlyReading.length > 0 && (
-                      <ListBooks books = {this.state.wantToRead} />
+                    {this.state.wantToRead.length > 0 && (
+                      <ListBooks books = {this.state.wantToRead} updateShelf = {this.updateBookShelf} />
                     )}
                   </div>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Read</h2>
                   <div className="bookshelf-books">
-                    {this.state.currentlyReading.length > 0 && (
-                      <ListBooks books = {this.state.read} />
+                    {this.state.read.length > 0 && (
+                      <ListBooks books = {this.state.read} updateShelf = {this.updateBookShelf} />
                     )}
                   </div>
                 </div>

@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 
 class ListBooks extends Component {
+
+    eventHandler = (book, event) => {
+      event.preventDefault()
+      const value = event.target.value
+      console.log(value)
+      this.props.updateShelf(book, value)
+    }
+
     render() {
       return (
         <ol className="books-grid">
@@ -10,7 +18,7 @@ class ListBooks extends Component {
               <div className="book-top">
               <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url('${book.imageLinks.thumbnail}')` }}></div>
               <div className="book-shelf-changer">
-                <select onChange={this.updateShelf}>
+                <select value={book.shelf} onChange={(event) => this.eventHandler(book, event)}>
                   <option value="move" disabled>Move to...</option>
                   <option value="currentlyReading">Currently Reading</option>
                   <option value="wantToRead">Want to Read</option>
