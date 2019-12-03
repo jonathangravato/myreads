@@ -1,53 +1,73 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import ListBooks from './ListBooks'
+import * as BooksAPI from './BooksAPI'
 
 class SearchBooks extends Component {
   constructor(props) {
     super(props);
-    this.state = { query: null };
+    this.state = { 
+      query: '',
+      searchResults: []
+    };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateSearchView = this.updateSearchView.bind(this);
   }
 
   handleChange(event) {
+    this.setState({
+      query: event.target.value
+    });
+  }
 
-    //console.log(event.key);
+  handleSubmit(event) {
+    event.preventDefault();
+    
+    BooksAPI.search(this.state.query).then( results => {
+      //Update search view with results from searching the API
+      this.updateSearchView(results);
+    })
+  }
 
-    if (event.key === ' ') {
-      this.setState({ query: event.target.value });
-    };
-
-    console.log(this.state.query);
+  updateSearchView = (res) => {
+    this.setState({
+      searchResults: res
+    })
   }
 
   render() {
+    const { onUpdateBookshelf } = this.props
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <button className="close-search" onClick={this.props.toggleHandler}>
-            Close
-          </button>
+          <Link 
+            to='/'
+            className="close-search"
+          > 
+            Close 
+          </Link>
           <div className="search-books-input-wrapper">
             {/*
-                NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                You can find these search terms here:
+                BooksAPI Acceptable search terms:
                 https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-  
-                However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                you don't find a specific author or title. Every search is limited by search terms.
+
+                TODO: write search algorithm.
               */}
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <input
                 type="text"
-                value={this.state.value}
+                value={this.state.query}
                 placeholder="Search by title or author"
-                onKeyPress={this.handleChange}
+                onChange={this.handleChange}
               />
             </form>
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            
+            <ListBooks books={this.state.searchResults} updateBookshelf={this.onUpdateBookshelf} />
           </ol>
         </div>
       </div>
