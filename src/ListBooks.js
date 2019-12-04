@@ -5,7 +5,6 @@ class ListBooks extends Component {
     eventHandler = (book, event) => {
       event.preventDefault()
       const value = event.target.value
-      console.log(value)
       this.props.updateShelf(book, value)
     }
 

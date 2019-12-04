@@ -38,23 +38,33 @@ class SearchBooks extends Component {
   }
 
   render() {
-    const { updateShelf } = this.props
+
+    const { updateShelf, booksCollection } = this.props
+    const { searchResults } = this.state
+
+    let verifiedBooks = []
+
+    if (searchResults.length > 0) {
+      verifiedBooks = searchResults.map(book => {
+        booksCollection.forEach(bookOnShelf => {
+          //check for book on shelf
+          book.id === bookOnShelf.id ? (
+            book.shelf = bookOnShelf
+          ) : (
+            book.shelf = 'none'
+          )
+        })
+        return book
+      })
+    }
+    
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link 
-            to='/'
-            className="close-search"
-          > 
+          <Link to='/' className="close-search"> 
             Close 
           </Link>
           <div className="search-books-input-wrapper">
-            {/*
-                BooksAPI Acceptable search terms:
-                https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                TODO: write search algorithm.
-              */}
             <form onSubmit={this.handleSubmit}>
               <input
                 type="text"
@@ -66,8 +76,8 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            <ListBooks books={this.state.searchResults} updateShelf = {this.updateShelf} />
+          <ol className="books-grid">            
+            <ListBooks books={verifiedBooks} updateShelf={updateShelf} />
           </ol>
         </div>
       </div>
