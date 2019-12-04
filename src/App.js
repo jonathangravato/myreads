@@ -15,10 +15,6 @@ class App extends React.Component {
     read: []
   }
 
-  toggleSearchPage() {
-    this.setState({ showSearchPage: false })
-  }
-
   sortBooks = (books) => {
     this.setState({
       booksCollection: books,
@@ -90,9 +86,7 @@ class App extends React.Component {
             </div>
           )} />
           <Route path='/search' render={() => (
-            <SearchBooks
-              onUpdateBookshelf={this.updateBookshelf}
-            />
+            <SearchBooks updateShelf = {this.updateShelf} />
           )} />
       </div>
     );
