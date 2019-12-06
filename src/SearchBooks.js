@@ -8,43 +8,52 @@ class SearchBooks extends Component {
     super(props);
     this.state = { 
       query: '',
-      searchResults: []
+      searchResults: [],
+      booksCollection: this.props.booksCollection
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.updateSearchView = this.updateSearchView.bind(this);
   }
 
   handleChange(event) {
+    
+    const { query } = this.state
+
     this.setState({
       query: event.target.value
     });
+
+    console.log(query);
+
+    if(query.length > 0 ){
+      BooksAPI.search(query)
+      .then( books => {
+        this.setState({ searchResults: books })
+      })
+      .catch( error => {
+        console.log('There are no matching books.');
+      })
+    } else {
+      this.setState({ searchResults: [] });
+    }
+
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    
-    BooksAPI.search(this.state.query).then( results => {
-      //Update search view with results from searching the API
-      this.updateSearchView(results);
-    })
-  }
-
-  updateSearchView = (res) => {
-    this.setState({
-      searchResults: res
-    })
-  }
+  // updateSearchView = (res) => {
+  //   this.setState({
+  //     searchResults: res
+  //   })
+  // }
 
   render() {
 
-    const { updateShelf, booksCollection } = this.props
+    const { booksCollection, updateShelf } = this.props
     const { searchResults } = this.state
 
     let verifiedBooks = []
 
     if (searchResults.length > 0) {
+
       verifiedBooks = searchResults.map(book => {
         booksCollection.forEach(bookOnShelf => {
           //check for book on shelf
@@ -65,14 +74,12 @@ class SearchBooks extends Component {
             Close 
           </Link>
           <div className="search-books-input-wrapper">
-            <form onSubmit={this.handleSubmit}>
               <input
                 type="text"
                 value={this.state.query}
                 placeholder="Search by title or author"
                 onChange={this.handleChange}
               />
-            </form>
           </div>
         </div>
         <div className="search-books-results">

@@ -28,9 +28,12 @@ class ListBooks extends Component {
               </div>
               <div className="book-title">{book.title}</div>
               <div className="book-authors">
-                  {book.authors.map((author) => (
-                    author
-                  ))}
+                  {Array.isArray(book.authors) ? 
+                    book.authors.map((author, i) => (
+                    <div key={i} className="book-authors"> {author}</div>
+                  )) :
+                    false
+                  }
               </div>
               </div> 
             </li>
