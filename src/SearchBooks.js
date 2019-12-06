@@ -13,6 +13,7 @@ class SearchBooks extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   handleChange(event) {
@@ -39,11 +40,17 @@ class SearchBooks extends Component {
 
   }
 
-  // updateSearchView = (res) => {
-  //   this.setState({
-  //     searchResults: res
-  //   })
-  // }
+  onKeyDown(event) {
+    const { query, searchResults } = this.state
+    if (event.keyCode === 8) {
+      if (query.length >= 0){
+        this.setState({
+          searchResults: []
+        })
+        console.log(searchResults)
+      }
+    } 
+  }
 
   render() {
 
@@ -79,12 +86,15 @@ class SearchBooks extends Component {
                 value={this.state.query}
                 placeholder="Search by title or author"
                 onChange={this.handleChange}
+                onKeyDown={this.onKeyDown}
               />
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">            
-            <ListBooks books={verifiedBooks} updateShelf={updateShelf} />
+          <ol className="books-grid">
+            {verifiedBooks.length > 0 && (
+              <ListBooks books={verifiedBooks} updateShelf={updateShelf} />
+            )}          
           </ol>
         </div>
       </div>

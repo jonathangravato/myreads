@@ -28,7 +28,6 @@ class App extends React.Component {
     //getAll from BooksAPI
     BooksAPI.getAll().then( books => {
       // Sort books for shelves
-      //console.log(books)
       this.sortBooks(books)
     })
   }
