@@ -6,6 +6,28 @@ class ListBooks extends Component {
   eventHandler = (book, event) => {
     event.preventDefault()
     const value = event.target.value
+
+    let selectedShelf = ''
+
+    switch(value) {
+      case 'currentlyReading':
+        selectedShelf = 'Currently Reading'
+        break
+      case 'wantToRead':
+        selectedShelf = 'Want to Read'
+        break
+      case 'read':
+        selectedShelf = 'Read'
+        break
+      case 'none':
+        alert(book.title + ' has been removed from all shelves')
+        break
+      default:
+        console.log(value)
+    }
+
+    value !== 'none' && alert(book.title + ' has been added to your ' + selectedShelf + ' shelf.')
+
     this.props.updateShelf(book, value)
   }
 
