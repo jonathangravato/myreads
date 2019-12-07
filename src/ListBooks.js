@@ -8,35 +8,6 @@ class ListBooks extends Component {
       this.props.updateShelf(book, value)
     }
 
-<<<<<<< HEAD
-    sortBooks(b, s){
-        if(s === 'currentlyReading') {
-            this.state.shelfReading.push(b)
-        }
-        if(s === 'wantToRead') {
-            this.state.shelfWantRead.push(b)
-        }
-        if(s === 'read') {
-            this.state.shelfRead.push(b)
-        }
-    }
-
-    componentDidUpdate() {
-        //TODO: sort books
-          console.log(this.props.books)
-        this.props.books.map((book) => {
-          return this.sortBooks(book, book.shelf)
-        })
-        
-        this.state.sortedBooks.push(this.state.shelfReading)
-        this.state.sortedBooks.push(this.state.shelfWantRead)
-        this.state.sortedBooks.push(this.state.shelfRead)
-
-        //console.log(this.state.sortedBooks)
-    }
-    
-=======
->>>>>>> dev
     render() {
       return (
         <ol className="books-grid">
