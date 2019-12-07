@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-//import ListBooks from './ListBooks'
+import ListBooks from './ListBooks'
 
 class SearchBooks extends Component {
   constructor(props) {
@@ -12,62 +12,56 @@ class SearchBooks extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    //this.onKeyDown = this.onKeyDown.bind(this);
   }
 
+  //Handle change of search input
   handleChange(event) {
-    const { bookSearch } = this.props
-    const { query, searchResults } = this.state
+    const { bookSearch, results } = this.props
+    const { query} = this.state
 
     this.setState({
       query: event.target.value
     });
 
+    /**
+     * Check if search field is populated then run search method in app root.
+     * Set state of search results to modify the UI when results are present
+     * or if search field is empty.
+     */
     if(query.length > 0 ){
-       this.setState({
-         searchResults: bookSearch(query)
-       })
+       bookSearch(query)
+       results.length > 0 && this.setState({ searchResults: results })
     } else {
-      this.setState({ searchResults: [] });
+      this.setState({ searchResults: [] })
     }
 
-    console.log(searchResults)
+    event.target.value.length === 0 && this.setState({
+      searchResults: []
+    })
 
   }
 
-  // onKeyDown(event) {
-  //   const { query, searchResults } = this.state
-  //   if (event.keyCode === 8) {
-  //     if (query.length >= 0){
-  //       this.setState({
-  //         searchResults: []
-  //       })
-  //       console.log(searchResults)
-  //     }
-  //   } 
-  // }
-
   render() {
 
-    // const { booksCollection, updateShelf } = this.props
-    // const { searchResults } = this.state
+    const { booksCollection, updateShelf } = this.props
+    const { searchResults } = this.state
 
-    // let verifiedBooks = []
+    let verifiedBooks = []
+    // If search results are present, verify they are not on the book shelves
+    if (searchResults.length > 0) {
 
-    // if (searchResults.length > 0) {
-
-    //   verifiedBooks = searchResults.map(book => {
-    //     booksCollection.forEach(bookOnShelf => {
-    //       //check for book on shelf
-    //       book.id === bookOnShelf.id ? (
-    //         book.shelf = bookOnShelf
-    //       ) : (
-    //         book.shelf = 'none'
-    //       )
-    //     })
-    //     return book
-    //   })
-    // }
+      verifiedBooks = searchResults.map(book => {
+        booksCollection.forEach(bookOnShelf => {
+          //Check for book on shelf
+          book.id === bookOnShelf.id ? (
+            book.shelf = bookOnShelf
+          ) : (
+            book.shelf = 'none'
+          )
+        })
+        return book
+      })
+    }
     
     return (
       <div className="search-books">
@@ -81,15 +75,14 @@ class SearchBooks extends Component {
                 value={this.state.query}
                 placeholder="Search by title or author"
                 onChange={this.handleChange}
-                onKeyDown={this.onKeyDown}
               />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {/* {verifiedBooks.length > 0 && (
+            {verifiedBooks.length > 0 && (
               <ListBooks books={verifiedBooks} updateShelf={updateShelf} />
-            )}           */}
+            )}          
           </ol>
         </div>
       </div>
