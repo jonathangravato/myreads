@@ -29,9 +29,7 @@ class App extends React.Component {
   sortBooks = (books, isSearch = false) => {
     isSearch ?
       this.setState({
-        searchResults: books.filter( (book) => {
-          return book
-        })
+        searchResults: books
       })
     :
       this.setState({
