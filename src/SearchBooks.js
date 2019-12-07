@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import ListBooks from './ListBooks'
-import * as BooksAPI from './BooksAPI'
+//import ListBooks from './ListBooks'
 
 class SearchBooks extends Component {
   constructor(props) {
@@ -13,66 +12,62 @@ class SearchBooks extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
+    //this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   handleChange(event) {
-    
-    const { query } = this.state
+    const { bookSearch } = this.props
+    const { query, searchResults } = this.state
 
     this.setState({
       query: event.target.value
     });
 
-    console.log(query);
-
     if(query.length > 0 ){
-      BooksAPI.search(query)
-      .then( books => {
-        this.setState({ searchResults: books })
-      })
-      .catch( error => {
-        console.log('There are no matching books.');
-      })
+       this.setState({
+         searchResults: bookSearch(query)
+       })
     } else {
       this.setState({ searchResults: [] });
     }
 
+    console.log(searchResults)
+
   }
 
-  onKeyDown(event) {
-    const { query, searchResults } = this.state
-    if (event.keyCode === 8) {
-      if (query.length >= 0){
-        this.setState({
-          searchResults: []
-        })
-        console.log(searchResults)
-      }
-    } 
-  }
+  // onKeyDown(event) {
+  //   const { query, searchResults } = this.state
+  //   if (event.keyCode === 8) {
+  //     if (query.length >= 0){
+  //       this.setState({
+  //         searchResults: []
+  //       })
+  //       console.log(searchResults)
+  //     }
+  //   } 
+  // }
 
   render() {
 
-    const { booksCollection, updateShelf } = this.props
-    const { searchResults } = this.state
+    // const { booksCollection, updateShelf } = this.props
+    // const { searchResults } = this.state
 
-    let verifiedBooks = []
+    // let verifiedBooks = []
 
-    if (searchResults.length > 0) {
+    // if (searchResults.length > 0) {
 
-      verifiedBooks = searchResults.map(book => {
-        booksCollection.forEach(bookOnShelf => {
-          //check for book on shelf
-          book.id === bookOnShelf.id ? (
-            book.shelf = bookOnShelf
-          ) : (
-            book.shelf = 'none'
-          )
-        })
-        return book
-      })
-    }
+    //   verifiedBooks = searchResults.map(book => {
+    //     booksCollection.forEach(bookOnShelf => {
+    //       //check for book on shelf
+    //       book.id === bookOnShelf.id ? (
+    //         book.shelf = bookOnShelf
+    //       ) : (
+    //         book.shelf = 'none'
+    //       )
+    //     })
+    //     return book
+    //   })
+    // }
     
     return (
       <div className="search-books">
@@ -92,9 +87,9 @@ class SearchBooks extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {verifiedBooks.length > 0 && (
+            {/* {verifiedBooks.length > 0 && (
               <ListBooks books={verifiedBooks} updateShelf={updateShelf} />
-            )}          
+            )}           */}
           </ol>
         </div>
       </div>

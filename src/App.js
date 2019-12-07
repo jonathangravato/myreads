@@ -12,7 +12,8 @@ class App extends React.Component {
     booksCollection: [],
     currentlyReading: [],
     wantToRead: [],
-    read: []
+    read: [],
+    searchResults: []
   }
 
   sortBooks = (books) => {
@@ -40,6 +41,18 @@ class App extends React.Component {
         }
       )
     })
+  }
+
+  searchBooks = (query) => {
+    BooksAPI.search(query)
+      .then( 
+        (result) => {
+          return result;
+        }
+      )
+      .catch( error => {
+        console.log('There are no matching books.');
+      })
   }
 
   render() {
@@ -86,7 +99,7 @@ class App extends React.Component {
             </div>
           )} />
           <Route path='/search' render={() => (
-            <SearchBooks updateShelf = {this.updateBookShelf} booksCollection={this.state.booksCollection} />
+            <SearchBooks booksCollection = {this.state.booksCollection} updateShelf = {this.updateBookShelf} bookSearch = {this.searchBooks}   />
           )} />
       </div>
     );
