@@ -12,6 +12,7 @@ class SearchBooks extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.verifyBooks = this.verifyBooks.bind(this);
   }
 
   //Handle change of search input
@@ -30,7 +31,7 @@ class SearchBooks extends Component {
      */
     if(query.length > 0 ){
        bookSearch(query)
-       results.length > 0 && this.setState({ searchResults: results })
+       results.length > 0 && this.verifyBooks(results)
     } else {
       this.setState({ searchResults: [] })
     }
@@ -41,27 +42,38 @@ class SearchBooks extends Component {
 
   }
 
-  render() {
-
-    const { booksCollection, updateShelf } = this.props
-    const { searchResults } = this.state
+  verifyBooks = (res) => {
+    const { booksCollection } = this.props
 
     let verifiedBooks = []
-    // If search results are present, verify they are not on the book shelves
-    if (searchResults.length > 0) {
+    // If search results are present on a shelf, set the value of book.shelf to that of the current shelf.
+    if (res.length > 0) {
 
-      verifiedBooks = searchResults.map(book => {
+      verifiedBooks = res.map(book => {
         booksCollection.forEach(bookOnShelf => {
           //Check for book on shelf
           book.id === bookOnShelf.id ? (
-            book.shelf = bookOnShelf
+            book.shelf = bookOnShelf.shelf
           ) : (
             book.shelf = 'none'
           )
         })
         return book
       })
+
+      this.setState({
+        searchResults: verifiedBooks
+      })
+
     }
+  } 
+
+  render() {
+
+    const { updateShelf } = this.props
+    const { searchResults } = this.state
+
+    console.log(searchResults.length)
     
     return (
       <div className="search-books">
@@ -80,8 +92,8 @@ class SearchBooks extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {verifiedBooks.length > 0 && (
-              <ListBooks books={verifiedBooks} updateShelf={updateShelf} />
+            {searchResults.length > 0 && (
+              <ListBooks books={searchResults} updateShelf={updateShelf} />
             )}          
           </ol>
         </div>
