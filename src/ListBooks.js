@@ -1,40 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-class ListBooks extends Component {
-
-  //Handle the update bookshelf event
-  eventHandler = (book, event) => {
-    event.preventDefault()
-    const value = event.target.value
-
-    let selectedShelf = ''
-
-    switch(value) {
-      case 'currentlyReading':
-        selectedShelf = 'Currently Reading'
-        break
-      case 'wantToRead':
-        selectedShelf = 'Want to Read'
-        break
-      case 'read':
-        selectedShelf = 'Read'
-        break
-      case 'none':
-        alert(book.title + ' has been removed from all shelves')
-        break
-      default:
-        console.log(value)
-    }
-
-    value !== 'none' && alert(book.title + ' has been added to your ' + selectedShelf + ' shelf.')
-
-    this.props.updateShelf(book, value)
-  }
-
-  render() {
+function ListBooks (props) {
     return (
       <ol className="books-grid">
-        {this.props.books.map((book) => (
+        {props.books.map((book) => (
           <li key={book.id}>
             <div className="book">
             <div className="book-top">
@@ -46,7 +15,7 @@ class ListBooks extends Component {
                     <div className="book-cover"></div>
               }
               <div className="book-shelf-changer">
-                <select value={book.shelf} onChange={(event) => this.eventHandler(book, event)}>
+                <select value={book.shelf} onChange={(event) => eventHandler(book, event, props)}>
                   <option value="move" disabled>Move to...</option>
                   <option value="currentlyReading">Currently Reading</option>
                   <option value="wantToRead">Want to Read</option>
@@ -72,6 +41,33 @@ class ListBooks extends Component {
       </ol>
     )
   }
+
+  function eventHandler(book, event, props){
+    event.preventDefault()
+    const value = event.target.value
+
+    let selectedShelf = ''
+
+    switch(value) {
+      case 'currentlyReading':
+        selectedShelf = 'Currently Reading'
+        break
+      case 'wantToRead':
+        selectedShelf = 'Want to Read'
+        break
+      case 'read':
+        selectedShelf = 'Read'
+        break
+      case 'none':
+        alert(book.title + ' has been removed from all shelves')
+        break
+      default:
+        console.log(value)
+    }
+
+    value !== 'none' && alert(book.title + ' has been added to your ' + selectedShelf + ' shelf.')
+
+    props.updateShelf(book, value)
   }
-  
+
   export default ListBooks

@@ -80,9 +80,9 @@ class SearchBooks extends Component {
   render() {
 
     const { updateShelf } = this.props
-    const { searchResults } = this.state
+    const { searchResults, query } = this.state
 
-    console.log(searchResults)
+    console.log(query.length)
     
     return (
       <div className="search-books">
