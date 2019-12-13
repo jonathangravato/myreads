@@ -55,7 +55,9 @@ class SearchBooks extends Component {
           book.id === bookOnShelf.id ? (
             book.shelf = bookOnShelf.shelf
           ) : (
-            book.shelf = 'none'
+            book.shelf || (
+              book.shelf = 'none'
+            )
           )
         })
         return book
@@ -66,19 +68,26 @@ class SearchBooks extends Component {
       })
 
     }
-  } 
+  }
+
+  clearSearch = () => {
+    this.setState({
+      query: '',
+      searchResults: []
+    })
+  }
 
   render() {
 
     const { updateShelf } = this.props
     const { searchResults } = this.state
 
-    console.log(searchResults.length)
+    console.log(searchResults)
     
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link to='/' className="close-search"> 
+          <Link to='/' className="close-search" onBlur={this.clearSearch}> 
             Close 
           </Link>
           <div className="search-books-input-wrapper">
