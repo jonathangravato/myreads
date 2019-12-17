@@ -8,6 +8,7 @@ class SearchBooks extends Component {
     this.state = { 
       query: '',
       searchResults: [],
+      searchStatus: '',
       booksCollection: this.props.booksCollection
     };
 
@@ -34,10 +35,14 @@ class SearchBooks extends Component {
      */
 
     if(query.length > 0 && results && !results.hasOwnProperty("error")){
+       this.setState({
+         searchStatus: 'true'
+       })
        results.length > 0 && this.verifyBooks(results)
     } else {
       this.setState({ 
-        searchResults: []
+        searchResults: [],
+        searchStatus: 'false'
        })
     }
 
@@ -79,7 +84,7 @@ class SearchBooks extends Component {
   render() {
 
     const { updateShelf } = this.props
-    const { searchResults, query } = this.state
+    const { searchResults, query, searchStatus } = this.state
     
     return (
       <div className="search-books">
@@ -97,11 +102,11 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            {searchResults.length > 0 && (
+            {(searchResults.length > 0 && searchStatus) ? (
               <ListBooks books={searchResults} updateShelf={updateShelf} />
+            ) : (
+              query.length > 0 && ( <p>No Books Found</p> )
             )}          
-          </ol>
         </div>
       </div>
     );

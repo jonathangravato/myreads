@@ -43,6 +43,7 @@ class App extends React.Component {
   //Call BooksAPI to update bookshelf of current book then sort books onto new shelves
   updateBookShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
+      // TODO: Replace with call to update only book that needs to be updated
       BooksAPI.getAll().then(
         books => {
           this.sortBooks(books)
@@ -58,7 +59,7 @@ class App extends React.Component {
         this.sortBooks(books, true)
       })
       .catch( error => {
-        console.log('There are no matching books.');
+        console.log('There are no matching books.')
       })
   }
 
