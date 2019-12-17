@@ -43,7 +43,9 @@ class App extends React.Component {
   //Call BooksAPI to update bookshelf of current book then sort books onto new shelves
   updateBookShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
+      
       // TODO: Replace with call to update only book that needs to be updated
+
       BooksAPI.getAll().then(
         books => {
           this.sortBooks(books)
@@ -64,6 +66,15 @@ class App extends React.Component {
   }
 
   render() {
+
+    // TODO: Loop through this object to render shelves.
+
+    // const shelves = {
+    //   currentlyReading: ['Currently Reading', 'currentlyReading'],
+    //   wantToRead: ['Want to Read', 'wantToRead'],
+    //   read: ['Read', 'read']
+    // }
+
     return (
       <div className="app">
           <Route exact path='/' render={() => (
