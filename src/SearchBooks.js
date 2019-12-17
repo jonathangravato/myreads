@@ -18,25 +18,30 @@ class SearchBooks extends Component {
   //Handle change of search input
   handleChange(event) {
     const { bookSearch, results } = this.props
-    const { query} = this.state
 
+    let query = event.target.value
+
+    bookSearch(event.target.value)
+    
     this.setState({
       query: event.target.value
     });
 
-    /**
+    /*
      * Check if search field is populated then run search method in app root.
      * Set state of search results to modify the UI when results are present
      * or if search field is empty.
      */
-    if(query.length > 0 ){
-       bookSearch(query)
+
+    if(query.length > 0 && results && !results.hasOwnProperty("error")){
        results.length > 0 && this.verifyBooks(results)
     } else {
-      this.setState({ searchResults: [] })
+      this.setState({ 
+        searchResults: []
+       })
     }
 
-    event.target.value.length === 0 && this.setState({
+    query.length === 0 && this.setState({
       searchResults: []
     })
 
@@ -46,6 +51,7 @@ class SearchBooks extends Component {
     const { booksCollection } = this.props
 
     let verifiedBooks = []
+
     // If search results are present on a shelf, set the value of book.shelf to that of the current shelf.
     if (res.length > 0) {
 
@@ -70,30 +76,21 @@ class SearchBooks extends Component {
     }
   }
 
-  clearSearch = () => {
-    this.setState({
-      query: '',
-      searchResults: []
-    })
-  }
-
   render() {
 
     const { updateShelf } = this.props
     const { searchResults, query } = this.state
-
-    console.log(query.length)
     
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link to='/' className="close-search" onBlur={this.clearSearch}> 
+          <Link to='/' className="close-search">
             Close 
           </Link>
           <div className="search-books-input-wrapper">
               <input
                 type="text"
-                value={this.state.query}
+                value={query}
                 placeholder="Search by title or author"
                 onChange={this.handleChange}
               />
